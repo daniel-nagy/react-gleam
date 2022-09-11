@@ -1,23 +1,13 @@
-import dom/element
 import gleam/int
-import gleam/javascript.{dereference, make_reference, set_reference}
 import gleam/string
+import react
+import react_dom_intrinsic.{button}
 
-pub fn setup_counter(element: element.Element) {
-  let counter = make_reference(0)
+pub fn counter() {
+  let #(count, set_count) = react.use_state(0)
 
-  let set_counter = fn(count: Int) {
-    set_reference(counter, count)
-
-    count
-    |> int.to_string
-    |> string.append("count is ", _)
-    |> element.set_inner_html(element, _)
-  }
-
-  let on_click = fn() { set_counter(dereference(counter) + 1) }
-
-  element.add_event_listener(element, "click", on_click)
-
-  set_counter(0)
+  count
+  |> int.to_string
+  |> string.append("count is ", _)
+  |> button([#("onClick", fn() { set_count(count + 1) })], _)
 }

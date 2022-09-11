@@ -1,2 +1,8 @@
-pub external fn set(ref: any_ref, prop: String, value: any_value) -> Nil =
+pub external fn apply(fun, ref, args) -> any =
+  "" "Reflect.apply"
+
+pub external fn get(ref, prop) -> any =
+  "" "Reflect.get"
+
+pub external fn set(ref, prop: String, value) -> Nil =
   "" "Reflect.set"

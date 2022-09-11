@@ -1,37 +1,54 @@
 import counter
 import dom/document
-import dom/element
-import gleam/io
+import gleam/option
+import react
+import react_dom/client as react_dom
+import react_dom_intrinsic.{a, div, h1, img, p}
 
 pub external fn load_styles() -> Nil =
   "/style.css" "default"
 
-pub external fn load_logo() -> Nil =
-  "/javascript.svg" "default"
-
 pub fn main() {
   document.query_selector("#app")
-  |> io.debug()
-  |> element.set_inner_html(
-    "
-    <div>
-      <a href='https://vitejs.dev' target='_blank'>
-        <img src='/vite.svg' class='logo' alt='Vite logo' />
-      </a>
-      <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript' target='_blank'>
-        <img src='${javascriptLogo}' class='logo vanilla' alt='JavaScript logo' />
-      </a>
-      <h1>Hello Vite!</h1>
-      <div class='card'>
-        <button id='counter' type='button'></button>
-      </div>
-      <p class='read-the-docs'>
-        Click on the Vite logo to learn more
-      </p>
-    </div>
-    ",
-  )
-
-  document.query_selector("#counter")
-  |> counter.setup_counter()
+  |> react_dom.create_root(option.None)
+  |> react_dom.render(#(
+    div(
+      [],
+      [
+        a(
+          [
+            #("href", "https://vitejs.dev"),
+            #("target", "_blank"),
+            #("key", "1"),
+          ],
+          img([
+            #("alt", "Vite logo"),
+            #("className", "logo"),
+            #("src", "/vite.svg"),
+          ]),
+        ),
+        a(
+          [
+            #("href", "https://developer.mozilla.org/en-US/docs/Web/JavaScript"),
+            #("target", "_blank"),
+            #("key", "2"),
+          ],
+          img([
+            #("alt", "JavaScript logo"),
+            #("className", "logo vanilla"),
+            #("src", "/javascript.svg"),
+          ]),
+        ),
+        h1([#("key", "3")], "Hello Vite!"),
+        div(
+          [#("className", "card"), #("key", "4")],
+          react.create_element(counter.counter, [], Nil),
+        ),
+        p(
+          [#("className", "read-the-docs"), #("key", "5")],
+          "Click on the Vite logo to learn more",
+        ),
+      ],
+    ),
+  ))
 }
